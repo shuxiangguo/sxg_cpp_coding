@@ -1,0 +1,24 @@
+/usr/opt/clion-2019.2.2/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/sxg/Workspace/cpp/qingdao
+CMake Error at ch05/CMakeLists.txt:7 (add_executable):
+  add_executable cannot create target "qingdao" because another target with
+  the same name already exists.  The existing target is an executable created
+  in source directory "/home/sxg/Workspace/cpp/qingdao/ch04".  See
+  documentation for policy CMP0002 for more details.
+
+
+CMake Error at ch06/CMakeLists.txt:7 (add_executable):
+  add_executable cannot create target "qingdao" because another target with
+  the same name already exists.  The existing target is an executable created
+  in source directory "/home/sxg/Workspace/cpp/qingdao/ch04".  See
+  documentation for policy CMP0002 for more details.
+
+
+CMake Error at CMakeLists.txt:11 (add_executable):
+  add_executable cannot create target "qingdao" because another target with
+  the same name already exists.  The existing target is an executable created
+  in source directory "/home/sxg/Workspace/cpp/qingdao/ch04".  See
+  documentation for policy CMP0002 for more details.
+
+
+-- Configuring incomplete, errors occurred!
+See also "/home/sxg/Workspace/cpp/qingdao/cmake-build-debug/CMakeFiles/CMakeOutput.log".

@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/slist2.dir/slist.cpp.o  -o slist2 

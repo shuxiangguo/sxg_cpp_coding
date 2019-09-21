@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/singleQueue.dir/singleQueue.cpp.o  -o singleQueue 

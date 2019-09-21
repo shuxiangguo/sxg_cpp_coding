@@ -1,0 +1,1 @@
+/usr/bin/cc -g   CMakeFiles/queue.dir/Queue.c.o  -o queue 
