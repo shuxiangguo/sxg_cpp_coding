@@ -3,7 +3,7 @@
 //
 
 # include<iostream>
-
+#include<stack>
 using namespace std;
 
 template<class T>
@@ -38,6 +38,44 @@ protected:
         found = rfindX(x, r->left);
         return found ? found : rfindX(x, r->right);
     }
+
+    void rprint(BinNode<T> *r, int depth) {
+        for (int i = 0; i < depth; i++) {
+            cout << " ";
+        }
+        if (!r) {
+            cout << "[/]" << endl;
+        } else {
+            cout << r->data << endl;
+            rprint(r->left, depth+1);
+            rprint(r->right, depth+1);
+        }
+
+    }
+
+    void rinprint(BinNode<T> *r) {
+        if (r == nullptr) return;
+        rinprint(r->left);
+        cout << r->data << " ";
+        rinprint(r->right);
+    }
+
+    // 非递归（迭代）形式的先序遍历
+    void ipreprint(BinNode<T> *r) {
+        stack<BinNode<T>*> st;
+        if (r == nullptr) return;
+        while (r) {
+            cout << r->data << ' ';
+            st.push(r);
+            r = r->left;
+
+            while (r == nullptr && !st.empty()) {
+                r = st.top();
+                st.pop();
+                r = r->right;
+            }
+        }
+    }
 public:
     BinaryTree() { root = nullptr;}
     BinaryTree(T r) {
@@ -47,11 +85,10 @@ public:
 
     }
 
+    //先序遍历
     void preprint() {
-        // visit root
-        // visit left
-        // visit right
-        rpreprint(root);
+        // rpreprint(root);
+        ipreprint(root);
         cout << endl;
     }
 
@@ -74,11 +111,19 @@ public:
         return true;
     }
 
+    void print() {
+        rprint(root, 0);
+    }
+
+    // 中序遍历
+    void inprint() {
+        rinprint(root);
+    }
+
 };
 
 int main() {
     BinaryTree<int> bt(11);
-    bt.preprint();
     // 在11的左儿子插入22
     bt.insert(11, 0, 22);
     bt.insert(11, 1, 33);
