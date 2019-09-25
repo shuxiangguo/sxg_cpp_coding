@@ -76,6 +76,31 @@ protected:
             }
         }
     }
+
+    // 非递归形式的中序遍历
+    void iinprint(BinNode<T> *r) {
+        stack<BinNode<T> *> st;
+        if (r == nullptr) return;
+        while (r) {
+            st.push(r);
+            r = r->left;
+
+            while (r == nullptr && !st.empty()) {
+                r = st.top();
+                st.pop();
+                // 和先序相比,访问次序不同
+                cout << r->data << " ";
+                r = r->right;
+            }
+        }
+    }
+
+    int countLeaves(BinNode<T> * r) {
+        if (r == nullptr) return 0;
+        if (r->left == nullptr && r->right == nullptr) return 1;
+        return countLeaves(r->left) + countLeaves(r->right);
+    }
+
 public:
     BinaryTree() { root = nullptr;}
     BinaryTree(T r) {
@@ -90,6 +115,12 @@ public:
         // rpreprint(root);
         ipreprint(root);
         cout << endl;
+    }
+
+    // 中序遍历
+    void inprint() {
+//        rinprint(root);
+        iinprint(root);
     }
 
     BinNode<T>* findX(T x) {
@@ -115,22 +146,59 @@ public:
         rprint(root, 0);
     }
 
-    // 中序遍历
-    void inprint() {
-        rinprint(root);
+    // 统计叶子节点个数
+    /**
+     * 输入格式：
+Ann
+Ann Bill Chris
+Bill Daisy Ellen
+Chris - Flin
+Daisy - -
+Ellen Grace Henry
+Flin --
+Grace --
+Henry --
+-
+     */
+
+    int count() {
+        return countLeaves(root);
     }
+
 
 };
 
 int main() {
-    BinaryTree<int> bt(11);
-    // 在11的左儿子插入22
-    bt.insert(11, 0, 22);
-    bt.insert(11, 1, 33);
+//    BinaryTree<int> bt(11);
+//    // 在11的左儿子插入22
+//    bt.insert(11, 0, 22);
+//    bt.insert(11, 1, 33);
+//
+//    bt.insert(22, 0, 44);
+//    bt.insert(33, 1, 55);
+//    cout << "pre print: ";
+//    bt.preprint();
+//
+//    cout << "in print: ";
+//    bt.inprint();
+    string name;
+    cin >> name;
+    BinaryTree<string> bt(name);
+    cin >> name;
+    while (name != "-") {
+        string lc, rc;
+        cin >> lc >> rc;
+        if (lc != "-") {
+            bt.insert(name, 0, lc);
+        }
+        if (rc != "-") {
+            bt.insert(name, 1, rc);
+        }
+        cin >> name;
+    }
 
-    bt.insert(22, 0, 44);
-    bt.insert(33, 1, 55);
-    bt.preprint();
+    cout << "Amount: " << bt.count() << endl;
+
     return 0;
 }
 
