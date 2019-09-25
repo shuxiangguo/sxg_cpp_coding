@@ -188,6 +188,28 @@ protected:
         } else throw -2;
         return r;
     }
+
+    // 递归形式删除
+    BinNode<T>* remove(T x, BinNode<T>* r) {
+        BinNode<T>* tmp;
+        if (!r) throw -1;
+        else if (x < r->data) {
+            r->left = remove(x, r->left);
+        } else if (x > r->data) {
+            r->right = remove(x, r->right);
+        } else {
+            if (r->left && r->right) {
+                tmp = rfindMax(r->left);
+                r->data = tmp->data;
+                r->left = remove(tmp->data, r->left);
+            } else {
+                tmp = r;
+                r = r->left ? r->left : r->right;
+                delete tmp;
+            }
+        }
+        return r;
+    }
 public:
     BSTree() {
         this->root = nullptr;
@@ -237,6 +259,15 @@ public:
     bool insert(T x) {
         try {
             this->root = rinsert(x, this->root);
+        } catch (int e) {
+            return false;
+        }
+        return true;
+    }
+
+    bool remove(T x) {
+        try {
+            this->root = remove(x, this->root);
         } catch (int e) {
             return false;
         }
@@ -293,6 +324,11 @@ int main() {
 
     cout << bt.findX(20)->data << endl;
     cout << bt.findX(6) << endl;
+
+    // 测试二叉搜索树删除操作
+    bt.remove(5);
+    bt.remove(9);
+    bt.print();
 
     return 0;
 }
