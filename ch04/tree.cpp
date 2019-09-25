@@ -168,6 +168,63 @@ Henry --
 
 };
 
+template<class T>
+class BSTree : public BinaryTree<T> {
+protected:
+    BinNode<T>* rfindMax(BinNode<T>* r) {
+        if (r->right == nullptr) return r;
+        return rfindMax(r->right);
+    }
+public:
+    BSTree() {
+        this->root = nullptr;
+    }
+
+    // 二叉搜索树找最大值
+    BinNode<T>* findMax() {
+        // 递归版本
+        // return rfindMax(this->root);
+
+        // 迭代版本
+        if (this->root == nullptr) return nullptr;
+        BinNode<T> *tmp = this->root;
+        while (tmp->right) {
+            tmp = tmp->right;
+        }
+        return tmp;
+
+    }
+
+    // 二叉搜索树找最小值
+    BinNode<T>* findMin() {
+        if(this->root == nullptr) return nullptr;
+        BinNode<T>* tmp = this->root;
+        while (tmp->left) {
+            tmp = tmp->left;
+        }
+        return tmp;
+    }
+
+    // 二叉搜索树找特定值x
+    BinNode<T>* findX(T x) {
+        if (this->root == nullptr) return nullptr;
+        BinNode<T>* tmp = this->root;
+
+        while (tmp && x ！= tmp->data) {
+
+            if (x < tmp->data) {
+                tmp = tmp->left;
+            } else {
+                tmp = tmp->right;
+            }
+        }
+        return tmp;
+    }
+
+
+
+};
+
 int main() {
 //    BinaryTree<int> bt(11);
 //    // 在11的左儿子插入22
