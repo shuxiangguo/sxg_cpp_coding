@@ -171,9 +171,22 @@ Henry --
 template<class T>
 class BSTree : public BinaryTree<T> {
 protected:
+    // 递归形式查找最大值
     BinNode<T>* rfindMax(BinNode<T>* r) {
         if (r->right == nullptr) return r;
-        return rfindMax(r->right);
+        return rfindMax(r->right); // 尾递归
+    }
+
+    // 递归形式插入
+    BinNode<T>* rinsert(T x, BinNode<T>* r) {
+        if (r == nullptr) {
+            r = new BinNode<T>(x);
+        } else if (x < r->data){
+            r->left = rinsert(x, r->left);
+        } else if (x > r->data) {
+            r->right = rinsert(x, r->right);
+        } else throw -2;
+        return r;
     }
 public:
     BSTree() {
@@ -210,7 +223,7 @@ public:
         if (this->root == nullptr) return nullptr;
         BinNode<T>* tmp = this->root;
 
-        while (tmp && x ！= tmp->data) {
+        while (tmp && x != tmp->data) {
 
             if (x < tmp->data) {
                 tmp = tmp->left;
@@ -219,6 +232,15 @@ public:
             }
         }
         return tmp;
+    }
+
+    bool insert(T x) {
+        try {
+            this->root = rinsert(x, this->root);
+        } catch (int e) {
+            return false;
+        }
+        return true;
     }
 
 
@@ -238,23 +260,39 @@ int main() {
 //
 //    cout << "in print: ";
 //    bt.inprint();
-    string name;
-    cin >> name;
-    BinaryTree<string> bt(name);
-    cin >> name;
-    while (name != "-") {
-        string lc, rc;
-        cin >> lc >> rc;
-        if (lc != "-") {
-            bt.insert(name, 0, lc);
-        }
-        if (rc != "-") {
-            bt.insert(name, 1, rc);
-        }
-        cin >> name;
-    }
 
-    cout << "Amount: " << bt.count() << endl;
+
+//    // 测试查找叶子节点
+//    string name;
+//    cin >> name;
+//    BinaryTree<string> bt(name);
+//    cin >> name;
+//    while (name != "-") {
+//        string lc, rc;
+//        cin >> lc >> rc;
+//        if (lc != "-") {
+//            bt.insert(name, 0, lc);
+//        }
+//        if (rc != "-") {
+//            bt.insert(name, 1, rc);
+//        }
+//        cin >> name;
+//    }
+//
+//    cout << "Amount: " << bt.count() << endl;
+
+    // 测试二叉搜索树的插入和查找
+    BSTree<int> bt;
+    bt.insert(10);
+    bt.insert(5);
+    bt.insert(20);
+    bt.insert(55);
+    bt.preprint();
+    cout << bt.findMax()->data << endl;
+    cout << bt.findMin()->data << endl;
+
+    cout << bt.findX(20)->data << endl;
+    cout << bt.findX(6) << endl;
 
     return 0;
 }
