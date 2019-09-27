@@ -14,11 +14,13 @@ using namespace std;
 template <class Elem>
 struct BinNode {
     Elem data;
+    int h;
     BinNode<Elem>* left;
     BinNode<Elem>* right;
     BinNode(Elem x) {
         data = x;
         left = right = nullptr;
+        h = 0;
     }
 };
 
