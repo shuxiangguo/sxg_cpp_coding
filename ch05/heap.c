@@ -39,9 +39,14 @@ int isFull(Heap h) {
     return h->capacity == h->size;
 }
 
+
+int isEmpty(Heap h) {
+    return h->size == 0;
+}
+
 // 向上过滤
 void percolateUp(int k, Heap h) {
-    int x;
+    Elem x;
     x = h->data[k];
 
     int i;
@@ -60,6 +65,29 @@ int insertHeap(Elem x, Heap h) {
 
 }
 
+void percolateDown(int k, Heap h) {
+    Elem x;
+    x = h->data[k];
+    int i, child;
+    for (i = k; i*2 <= h->size; i = child) {
+        child = i * 2;
+        if (child != h->size && h->data[child] > h->data[child+1]) child++;
+        if (h->data[i] > h->data[child]) {
+            h->data[i] = h->data[child];
+        }
+    }
+    h->data[i] = x;
+}
+
+// 删除最小堆的根
+int removeHeap(Elem *x, Heap h) {
+    if (isEmpty(h)) return 0;
+    *x = h->data[1];
+    h->data[1] = h->data[h->size--];
+    percolateDown(1, h);
+    return 1;
+}
+
 int main() {
     Heap h;
     h = initHeap(10);
@@ -70,6 +98,13 @@ int main() {
     insertHeap(5, h);
     printHeap(h);
     insertHeap(15, h);
+    insertHeap(30, h);
+    insertHeap(18, h);
     printHeap(h);
+    Elem x;
+    removeHeap(&x, h);
+    printf("%d\n", x);
+    printHeap(h);
+
     return 0;
 }
