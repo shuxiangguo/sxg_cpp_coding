@@ -4,4 +4,4 @@ project(ch05)
 set(CMAKE_CXX_STANDARD 14)
 
 
-add_executable(qingdao main.cpp)
+add_executable(heap heap.c)
