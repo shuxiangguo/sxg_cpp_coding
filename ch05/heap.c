@@ -88,22 +88,44 @@ int removeHeap(Elem *x, Heap h) {
     return 1;
 }
 
-int main() {
+// O(N)的时间
+Heap buildHeap(Elem *a, int size, int max) {
     Heap h;
-    h = initHeap(10);
-    insertHeap(20, h);
-    printHeap(h);
-    insertHeap(10, h);
-    printHeap(h);
-    insertHeap(5, h);
-    printHeap(h);
-    insertHeap(15, h);
-    insertHeap(30, h);
-    insertHeap(18, h);
-    printHeap(h);
-    Elem x;
-    removeHeap(&x, h);
-    printf("%d\n", x);
+    h = initHeap(max);
+    if (!h) return NULL;
+    h->size = size;
+
+    for (int i = 1; i <= size; i++) {
+        h->data[i] = a[i-1];
+    }
+    for (int i = size / 2; i > 0; i--) {
+        percolateDown(i, h);
+    }
+    return h;
+}
+
+int main() {
+//    Heap h;
+//    h = initHeap(10);
+//    insertHeap(20, h);
+//    printHeap(h);
+//    insertHeap(10, h);
+//    printHeap(h);
+//    insertHeap(5, h);
+//    printHeap(h);
+//    insertHeap(15, h);
+//    insertHeap(30, h);
+//    insertHeap(18, h);
+//    printHeap(h);
+//    Elem x;
+//    removeHeap(&x, h);
+//    printf("%d\n", x);
+//    printHeap(h);
+
+    // 利用O(N)的时间实现一个buildHeap的操作
+    Elem a[6] = {10, 50, 60, 5, 30, 20};
+    Heap h;
+    h = buildHeap(a, 6, 50);
     printHeap(h);
 
     return 0;
