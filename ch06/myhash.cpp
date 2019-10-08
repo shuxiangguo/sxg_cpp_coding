@@ -90,6 +90,14 @@ int findX(int x, HT h) {
     return -1;
 }
 
+int removeX(int x, HT h) {
+    int pos = findX(x, h);
+    if (pos == -1) return 0;
+    h->status[pos] = Removed;
+    h->remains++;
+    return 1;
+}
+
 int main() {
     HT h = initHashTable(11);
     insertX(5, h);
@@ -97,9 +105,14 @@ int main() {
     insertX(10, h);
     insertX(21, h);
     insertX(33, h);
+    insertX(9, h);
+    insertX(20, h);
+    printHT(h);
+
+    removeX(21, h);
     printHT(h);
     int i;
-    i = findX(10, h);
+    i = findX(20, h);
     printf("%d", i);
     return 0;
 }
