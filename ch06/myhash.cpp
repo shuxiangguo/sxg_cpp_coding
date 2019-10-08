@@ -79,6 +79,17 @@ void printHT(const HT h) {
     putchar('\n');
 }
 
+int findX(int x, HT h) {
+    int pos, index;
+    index = pos = hash(x, h->size);
+    while (h->key[pos] != Empty) {
+        if (h->key[pos] == x && h->status[pos] == Active) return pos;
+        pos = (pos + 1) % h->size;
+        if (pos == index) break;
+    }
+    return -1;
+}
+
 int main() {
     HT h = initHashTable(11);
     insertX(5, h);
@@ -87,5 +98,8 @@ int main() {
     insertX(21, h);
     insertX(33, h);
     printHT(h);
+    int i;
+    i = findX(10, h);
+    printf("%d", i);
     return 0;
 }
