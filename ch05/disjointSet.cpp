@@ -66,6 +66,17 @@ struct DisjointSet {
         return i;
 
     }
+
+    void unionSet(int r1, int r2) {
+        parent[r2] = r1;
+    }
+
+    void test() {
+        unionSet(1, 3);
+        unionSet(2, 4);
+        unionSet(4, 5);
+        print();
+    }
 };
 
 int main() {
@@ -77,5 +88,6 @@ int main() {
     s.insert(123);
     s.print();
     cout << s.find(66);
+    s.test();
     return 0;
 }
