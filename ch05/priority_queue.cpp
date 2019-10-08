@@ -7,6 +7,7 @@
 
 using namespace std;
 int main() {
+    // C++里面的堆默认是大根堆
 //    priority_queue<int> q;
     priority_queue<int, vector<int>, greater<int>> q;
     q.push(111);
