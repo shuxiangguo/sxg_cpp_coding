@@ -247,7 +247,7 @@ public:
         adjL[src].erase(dst);
 
         // 无向图
-        if (!directed) adjL.erase(src);
+        if (!directed) adjL[dst].erase(src);
 
         return true;// 删除成功
     }
