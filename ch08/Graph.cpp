@@ -56,6 +56,14 @@ public:
             return true;
         }
     }
+
+    virtual bool insertE(string src, string dst, int weight=1) {
+        insertV(src);
+        insertV(dst);
+        return insertE(iov[src], iov[dst], weight);
+    }
+
+    virtual bool insertE(int src, int dst, int weight=1) = 0;
 };
 
 
@@ -112,6 +120,22 @@ public:
             adjM[i].push_back(INT_MAX);
         }
         adjM.push_back((vector<int>(nv, INT_MAX)));
+        return true;
+    }
+
+    virtual bool insertE(string src, string dst, int weight=1) {
+        return Graph::insertE(src, dst, weight);
+    }
+
+    virtual bool insertE(int src, int dst, int weight=1) {
+        if (src < 0 || dst < 0 || src >= nv || dst >= nv) {
+            return false;
+        }
+
+        // 边已经存在
+        if (adjM[src][dst] != INT_MAX) return false;
+        adjM[src][dst] = weight;
+        if (!directed) adjM[dst][src] = weight;
         return true;
     }
 };
@@ -171,8 +195,14 @@ int main() {
 //    Graph g(5);
 //    g.test();
 //    MGraph g(5);
-    LGraph g(v);
-    g.insertV("X");
+//    LGraph g(v);
+//    g.insertV("X");
+    MGraph g(v, true);
+    g.insertE("AA", "CC");
+    g.insertE(1, 3);
+    g.insertE("DD", "EE", 6);
+    g.insertE("x", "EE");
+    g.insertE("P", "Q");
     g.print();
     return 0;
 }
