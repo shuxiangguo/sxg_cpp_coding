@@ -64,6 +64,13 @@ public:
     }
 
     virtual bool insertE(int src, int dst, int weight=1) = 0;
+
+    // 删除边
+    virtual bool removeE(string src, string dst) {
+        if (iov.find(src) == iov.end() || iov.find(dst) == iov.end()) return false;
+        return removeE(iov[src], iov[dst]);
+    }
+    virtual bool removeE(int src, int dst) = 0;
 };
 
 
@@ -138,6 +145,29 @@ public:
         if (!directed) adjM[dst][src] = weight;
         return true;
     }
+
+    // 删除边
+    virtual bool removeE(string src, string dst) {
+        return Graph::removeE(src, dst);
+    }
+    virtual bool removeE(int src, int dst) {
+        if (src < 0 || dst < 0 || src >= nv || dst >= nv) {
+            return false;
+        }
+
+        // 如果边不存在， 直接返回删除边失败
+        if (adjM[src][dst] == INT_MAX) {
+            return false;
+        }
+
+        // 边存在，则删除
+        adjM[src][dst] = INT_MAX;
+
+        // 无向图
+        if (!directed) adjM[dst][src] = INT_MAX;
+
+        return true;// 删除成功
+    }
 };
 
 // 邻接表表示的图
@@ -182,6 +212,45 @@ public:
         adjL.push_back(map<int, int> ());
         return true;
     }
+
+    virtual bool insertE(string src, string dst, int weight=1) {
+        return Graph::insertE(src, dst, weight);
+    }
+
+    virtual bool insertE(int src, int dst, int weight=1) {
+        if (src < 0 || dst < 0 || src >= nv || dst >= nv) {
+            return false;
+        }
+
+        // 边已经存在
+        if (adjL[src].find(dst) != adjL[src].end()) return false;
+        adjL[src].insert(pair<int, int>(dst, weight));
+        if (!directed) adjL[dst].insert(pair<int, int>(src, weight));
+        return true;
+    }
+
+    // 删除边
+    virtual bool removeE(string src, string dst) {
+        return Graph::removeE(src, dst);
+    }
+    virtual bool removeE(int src, int dst) {
+        if (src < 0 || dst < 0 || src >= nv || dst >= nv) {
+            return false;
+        }
+
+        // 如果边不存在， 直接返回删除边失败
+        if (adjL[src].find(dst) == adjL[src].end()) {
+            return false;
+        }
+
+        // 边存在，则删除
+        adjL[src].erase(dst);
+
+        // 无向图
+        if (!directed) adjL.erase(src);
+
+        return true;// 删除成功
+    }
 };
 
 /**
@@ -197,7 +266,7 @@ int main() {
 //    MGraph g(5);
 //    LGraph g(v);
 //    g.insertV("X");
-    MGraph g(v, true);
+    LGraph g(v, true);
     g.insertE("AA", "CC");
     g.insertE(1, 3);
     g.insertE("DD", "EE", 6);
