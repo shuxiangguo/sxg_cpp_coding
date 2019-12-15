@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include<queue>
 using namespace std;
 
 class Graph {
@@ -194,6 +195,30 @@ public:
     void dfs(string v) {
         Graph::dfs(v);
     }
+
+    // 利用队列实现
+    void bfs(string v) {
+        if (iov.find(v) == iov.end()) return;
+        int iv = iov[v];
+        visited.resize(nv);
+        for (int i = 0; i < nv; i++) visited[i] = false;
+        queue<int> q;
+        cout << v << " ";
+        visited[iv] = true;
+        q.push(iv);
+        int w;
+        while (!q.empty()) {
+            w = q.front();
+            q.pop();
+            for (int i = 0; i < nv; i++) {
+                if (!visited[i] && adjM[w][i] != INT_MAX) {
+                    cout << vertices[i] << " ";
+                    visited[i] = true;
+                    q.push(i);
+                }
+            }
+        }
+    }
 };
 
 // 邻接表表示的图
@@ -295,6 +320,30 @@ public:
         Graph::dfs(v);
     }
 
+    void bfs(string v) {
+        // 判断点v是否存在
+        if (iov.find(v) == iov.end())return;
+        int iv = iov[v];
+        visited.resize(nv);
+        for (int i = 0; i < nv; i++)  visited[i] = 0;
+        queue<int> q;
+        cout << v << " ";
+        visited[iv] = true;
+        q.push(iv);
+        int w;
+        while (!q.empty()) {
+            w = q.front();
+            q.pop();
+            for (auto x : adjL[w]) {
+                if (!visited[x.first]) {
+                    cout << vertices[x.first] << " ";
+                    visited[x.first] = true;
+                    q.push(x.first);
+                }
+            }
+        }
+    }
+
 
 };
 
@@ -323,5 +372,10 @@ int main() {
 
     // 深度优先遍历
     g.dfs("AA");
+
+    cout << endl;
+    cout << "===================" << endl;
+    // 广度优先遍历
+    g.bfs("AA");
     return 0;
 }
