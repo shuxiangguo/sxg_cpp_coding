@@ -15,6 +15,8 @@ protected:
     vector<string> vertices; // 存储顶点
     map<string, int> iov; // index of value 值的下标
     bool directed; // 是否是有向图
+    vector<bool> visited;
+    virtual void dfs(int v) = 0;
 
 public:
     Graph(bool dir=false) { // C++ 支持默认参数
@@ -71,6 +73,16 @@ public:
         return removeE(iov[src], iov[dst]);
     }
     virtual bool removeE(int src, int dst) = 0;
+
+    virtual void dfs(string v) {
+        if (iov.find(v) == iov.end()) return;
+        visited.resize(nv);
+        for (int i = 0; i < nv; i++) {
+            visited[i] = false;
+        }
+
+        dfs(iov[v]);
+    }
 };
 
 
@@ -84,6 +96,16 @@ protected:
             adjM[i].resize(nv);
             for (int j = 0; j < nv; j++) {
                 adjM[i][j] = INT_MAX;
+            }
+        }
+    }
+
+    void dfs(int v) {
+        cout << vertices[v] << " ";
+        visited[v] = true;
+        for (int i = 0; i < nv; i++) {
+            if (!visited[i] && adjM[v][i] != INT_MAX) {
+                dfs(i);
             }
         }
     }
@@ -168,6 +190,10 @@ public:
 
         return true;// 删除成功
     }
+
+    void dfs(string v) {
+        Graph::dfs(v);
+    }
 };
 
 // 邻接表表示的图
@@ -180,6 +206,16 @@ protected:
             x.clear();
         }
     }
+
+    void dfs(int v) override {
+        cout << vertices[v] << " ";
+        visited[v] = true;
+        for (auto x : adjL[v]) {
+            if (!visited[x.first]) {
+                dfs(x.first);
+            }
+        }
+    }
 public:
     LGraph(bool dir=false) : Graph(dir) {}
     LGraph(vector<string> v, bool dir=false) : Graph(v, dir) {
@@ -190,8 +226,6 @@ public:
     }
 
     void print() {
-        adjL[0].insert(pair<int, int>(1, 90));
-        adjL[0].insert(pair<int,int>(2, 30));
         for (int i = 0; i < nv; i++) {
             cout << vertices[i] <<"[" << i << "]---->";
             for (auto x : adjL[i]) {
@@ -251,6 +285,17 @@ public:
 
         return true;// 删除成功
     }
+
+    // 函数指针，将要做的是通过函数指针传递进去
+//    void dfs(void (*visit(string))) {
+//
+//    }
+
+    void dfs(string v) override {
+        Graph::dfs(v);
+    }
+
+
 };
 
 /**
@@ -266,12 +311,17 @@ int main() {
 //    MGraph g(5);
 //    LGraph g(v);
 //    g.insertV("X");
-    LGraph g(v, true);
+    LGraph g(v);
     g.insertE("AA", "CC");
     g.insertE(1, 3);
     g.insertE("DD", "EE", 6);
-    g.insertE("x", "EE");
+    g.insertE("X", "EE");
     g.insertE("P", "Q");
+    g.insertE("CC", "X");
+    g.insertE("EE", "BB");
     g.print();
+
+    // 深度优先遍历
+    g.dfs("AA");
     return 0;
 }
