@@ -8,6 +8,7 @@
 #include <string>
 #include <map>
 #include<queue>
+#include<set>
 using namespace std;
 
 class Graph {
@@ -342,6 +343,83 @@ public:
                 }
             }
         }
+    }
+
+    void dfs(int v, set<int>& school) {
+        visited[v] = true;
+        school.insert(v);
+        for (auto x : adjL[v]) {
+            if (!visited[x.first]) dfs(x.first, school);
+        }
+    }
+
+    // 深度优先遍历
+    void findSchool() {
+        set<int> school;
+        vector<set<int>> schoolList;
+        visited.resize(nv);
+        for (int i = 0; i < nv; i++) {
+            visited[i] = false;
+        }
+        for (int i = 0; i < nv; i++) {
+            school.clear();
+            if (!visited[i]) dfs(i, school);
+            schoolList.push_back(school);
+        }
+
+        int max = schoolList[0].size();
+        int maxi = 0;
+        for (int i = 1; i < schoolList.size(); i++) {
+            if (max < schoolList[i].size()) {
+                max = schoolList[i].size();
+                maxi = i;
+            }
+        }
+        cout << max << endl;
+        for (auto x : schoolList[maxi]) {
+            cout << vertices[x] << " ";
+        }
+    }
+
+    // 广度优先遍历
+    void findSchoolBFS() {
+        queue<int> q;
+        vector<int> inschool(nv, -1); // 人所属的学校
+        int school, count, max, maxschool;
+        maxschool = max = count = school = 0;
+        for (int i = 0; i < nv; i++) {
+            if (inschool[i] != -1) continue;
+            school++;
+            count = 1;
+            inschool[i] = school;
+            q = queue<int>();
+            q.push(i);
+            int w;
+            while (!q.empty()) {
+                w = q.front();
+                q.pop();
+                for (auot x : adjL[w]) {
+                    if (inschool[x.first] == -1) {
+                        inschool[x.first] = school;
+                        count++;
+                        q.push(x.first);
+                    }
+                }
+            }
+
+            if (max < count) {
+                max = count;
+                maxschool = school;
+            }
+        }
+
+        cout << max << endl;
+        for (int i = 0; i < nv; i++) {
+            if (inschool[i] == maxschool) {
+                cout << vertices[i] << " ";
+            }
+        }
+        cout << endl;
     }
 
 
