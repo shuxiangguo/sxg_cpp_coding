@@ -258,6 +258,45 @@ public:
         for (int i = 0; i < nv; i++) cout << (from[i] >= 0?vertices[from[i]] : "-") << '\t';
         cout << endl;
     }
+
+    void weightedShortest(string src) {
+        if (iov.find(src) == iov.end()) return;
+        vector<int> d(nv, INT_MAX);
+        vector<int> from(nv, -1);
+
+        queue<int> q;
+        vector<bool> inqueue(nv, false);
+        d[iov[src]] = 0;
+
+        q.push(iov[src]);
+        inqueue[iov[src]] = true;
+
+        int v;
+        while (!q.empty()) {
+            v = q.front();
+            q.pop();
+            inqueue[v] = false;
+            for (int w = 0; w < nv; w++) {
+                if (adjM[v][w] != INT_MAX && d[v] + adjM[v][w] < d[w]) {
+                    d[w] = d[v] + adjM[v][w];
+                    from[w] = v;
+                    if (!inqueue[w]) {
+                        q.push(w);
+                        inqueue[w] = true;
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < nv; i++) cout << i << '\t';
+        cout << endl;
+        for (int i = 0; i < nv; i++) cout << vertices[i] << '\t';
+        cout << endl;
+        for (int i = 0; i < nv; i++) cout << d[i] << '\t';
+        cout << endl;
+        for (int i = 0; i < nv; i++) cout << (from[i] >= 0?vertices[from[i]] : "-") << '\t';
+        cout << endl;
+    }
 };
 
 // 邻接表表示的图
@@ -585,8 +624,8 @@ C02 C06
         cin >> n1 >> n2 >> weight;
         g.insertE(n1, n2, weight);
     }
-    g.dijkstra("A");
-
+//    g.dijkstra("A");
+    g.weightedShortest("A");
     return 0;
 }
 
