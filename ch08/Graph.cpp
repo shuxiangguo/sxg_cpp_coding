@@ -398,7 +398,7 @@ public:
             while (!q.empty()) {
                 w = q.front();
                 q.pop();
-                for (auot x : adjL[w]) {
+                for (auto x : adjL[w]) {
                     if (inschool[x.first] == -1) {
                         inschool[x.first] = school;
                         count++;
@@ -422,6 +422,65 @@ public:
         cout << endl;
     }
 
+    bool topSort() { // 有环则会出错
+        vector<int> inDegree(nv, 0);
+        for (const auto& vl : adjL) {
+            for (auto w : vl) { // <x,y>
+                inDegree[w.first]++;
+            }
+        }
+
+        queue<int> q;
+        for (int i = 0; i < nv; i++) {
+            if (inDegree[i] == 0) {
+                q.push(i);
+            }
+        }
+        int cnt = 0;
+        int v;
+        while (!q.empty()) {
+            v = q.front();
+            q.pop();
+            cout << vertices[v] << " ";
+            cnt++;
+            for (auto w : adjL[v]) {
+                inDegree[w.first]--;
+                if (inDegree[w.first] == 0) {
+                    q.push(w.first);
+                }
+            }
+        }
+
+        cout << endl;
+        if (cnt != nv) return false; // 表示有环
+        return true;
+    }
+
+    void shortest(string src) {
+        if (iov.find(src) == iov.end()) return;
+        vector<int> d(nv, INT_MAX);
+        vector<int> from(nv, -1);
+        d[iov[src]] = 0;
+        queue<int> q;
+        q.push(iov[src]);
+        int v;
+        while (!q.empty()) {
+            v = q.front();
+            q.pop();
+            for (auto w : adjL[v]) {
+                if (d[w.first] == INT_MAX) {
+                    d[w.first] = d[v] + 1;
+                    from[w.first] = v;
+                    q.push(w.first);
+                }
+            }
+        }
+
+        for (int i = 0; i < nv; i++) {
+            cout << vertices[i] << "(" << d[i] << ", " << (from[i] >= 0 ? vertices[from[i]] : "-") << ") ";
+        }
+        cout << endl;
+    }
 
 };
 
@@ -431,29 +490,71 @@ public:
  */
 
 int main() {
-    vector<string> v = {"AA", "BB", "CC", "DD", "EE"};
-    //Graph g(v);
-//    Graph g(5);
-//    g.test();
-//    MGraph g(5);
+//    vector<string> v = {"AA", "BB", "CC", "DD", "EE"};
+//    //Graph g(v);
+////    Graph g(5);
+////    g.test();
+////    MGraph g(5);
+////    LGraph g(v);
+////    g.insertV("X");
 //    LGraph g(v);
-//    g.insertV("X");
-    LGraph g(v);
-    g.insertE("AA", "CC");
-    g.insertE(1, 3);
-    g.insertE("DD", "EE", 6);
-    g.insertE("X", "EE");
-    g.insertE("P", "Q");
-    g.insertE("CC", "X");
-    g.insertE("EE", "BB");
-    g.print();
+//    g.insertE("AA", "CC");
+//    g.insertE(1, 3);
+//    g.insertE("DD", "EE", 6);
+//    g.insertE("X", "EE");
+//    g.insertE("P", "Q");
+//    g.insertE("CC", "X");
+//    g.insertE("EE", "BB");
+//    g.print();
+//
+//    // 深度优先遍历
+//    g.dfs("AA");
+//
+//    cout << endl;
+//    cout << "===================" << endl;
+//    // 广度优先遍历
+//    g.bfs("AA");
 
-    // 深度优先遍历
-    g.dfs("AA");
 
-    cout << endl;
-    cout << "===================" << endl;
-    // 广度优先遍历
-    g.bfs("AA");
+    // 拓扑排序
+    /*
+输入示例:
+5
+C03 C04
+C04 C05
+C01 C02
+C05 C06
+C02 C06
+
+
+*/
+    LGraph g(true);
+    string n1, n2;
+    int M;
+    cin >> M;
+    for (int i = 0; i < M; i++) {
+        cin >> n1 >> n2;
+        g.insertE(n1, n2);
+    }
+//    g.topSort();
+    g.shortest("C");
+
     return 0;
 }
+
+// 无权图最短路径输入
+/**
+12
+A B
+C A
+A D
+B D
+B E
+D C
+D E
+C F
+D F
+D G
+E G
+G F
+*/
