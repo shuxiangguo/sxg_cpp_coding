@@ -4,4 +4,4 @@ project(qingdao)
 set(CMAKE_CXX_STANDARD 14)
 
 
-add_executable(Graph Graph.cpp ../ch09/main.cpp)
+add_executable(main main.cpp)
