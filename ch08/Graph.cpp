@@ -297,6 +297,41 @@ public:
         for (int i = 0; i < nv; i++) cout << (from[i] >= 0?vertices[from[i]] : "-") << '\t';
         cout << endl;
     }
+
+    void prim(string src) {
+        if (iov.find(src) == iov.end()) return;
+        vector<int> d(nv, INT_MAX);
+        vector<int> from(nv, -1);
+        vector<bool> known(nv, false);
+        d[iov[src]] = 0;
+        int minDis, v;
+        for (int t = 0; t < nv; t++) {
+            minDis = INT_MAX;
+            v= -1;
+            for (int i = 0; i < nv; i++) {
+                if (known[i] == false && d[i] < minDis) {
+                    minDis = d[i];
+                    v = i;
+                }
+            }
+            if (v == -1) break;
+            known[v] = true;
+            for (int w = 0; w < nv; w++) {
+                if (adjM[v][w] != INT_MAX && !known[w] && adjM[v][w] < d[w]) {
+                    d[w] = adjM[v][w];
+                    from[w] = v;
+                }
+            }
+        }
+        for (int i = 0; i < nv; i++) cout << i << '\t';
+        cout << endl;
+        for (int i = 0; i < nv; i++) cout << vertices[i] << '\t';
+        cout << endl;
+        for (int i = 0; i < nv; i++) cout << d[i] << '\t';
+        cout << endl;
+        for (int i = 0; i < nv; i++) cout << (from[i] >= 0?vertices[from[i]] : "-") << '\t';
+        cout << endl;
+    }
 };
 
 // 邻接表表示的图
@@ -615,7 +650,7 @@ C02 C06
 //    }
 ////    g.topSort();
 //    g.shortest("C");
-    MGraph g(true);
+    MGraph g;
     string n1, n2;
     int weight;
     int M;
@@ -625,7 +660,8 @@ C02 C06
         g.insertE(n1, n2, weight);
     }
 //    g.dijkstra("A");
-    g.weightedShortest("A");
+//    g.weightedShortest("A");
+    g.prim("A");
     return 0;
 }
 
@@ -656,6 +692,24 @@ B D 3
 B E 10
 D C 2
 D E 2
+C F 5
+D F 8
+D G 4
+E G 6
+G F 1
+
+*/
+
+// prim算法输入
+/**
+12
+A B 2
+C A 4
+A D 1
+B D 3
+B E 10
+D C 2
+D E 7
 C F 5
 D F 8
 D G 4
